@@ -7,22 +7,32 @@ import java.util.HashMap;
 
 @Data
 public class R extends HashMap<String, Object> implements Serializable {
-
+    /**
+     * 响应码
+     */
     private String code;
+
+    /**
+     * 响应消息
+     */
     private String msg;
+
+    /**
+     * 响应数据
+     */
     private Object data;
 
     public static R success() {
         R map = new R();
         map.put(Const.CODE, "0");
-        map.put(Const.MSG, "成功");
+        map.put(Const.MSG, "操作成功");
         return map;
     }
 
     public static R success(Object data) {
         R map = new R();
         map.put(Const.CODE, "0");
-        map.put(Const.MSG, "成功");
+        map.put(Const.MSG, "操作成功");
         map.put(Const.DATA, data);
         return map;
     }
@@ -30,14 +40,14 @@ public class R extends HashMap<String, Object> implements Serializable {
     public static R error() {
         R map = new R();
         map.put(Const.CODE, "1");
-        map.put(Const.MSG, "失败");
+        map.put(Const.MSG, "操作失败");
         return map;
     }
 
     public static R error(String msg) {
         R map = new R();
         map.put(Const.CODE, "1");
-        map.put(Const.MSG, msg);
+        map.put(Const.MSG, "操作失败，" + msg);
         return map;
     }
 
