@@ -1,0 +1,35 @@
+server:
+  port: 8080  # 端口号
+  servlet:
+    context-path: /boot001   #项目根路径（前面必须加/）
+
+spring:
+  # 项目名称
+#  application:
+#    name: boot001
+  # 当前配置文件
+#  profiles:
+#    active: dev
+  # Mysql配置
+  datasource:
+    driver-class-name:  com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/boot001?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: root
+    password: root
+
+# Mybatis配置
+mybatis:
+  mapper-locations: classpath:mappers/*.xml #指定Mybatis的Mapper文件
+  type-aliases-package: com.jd.boot001.*.entity  #指定Mybatis的实体目录
+  configuration:
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl  # 设置MyBatis的日志实现为log4j2
+
+# 日志
+logging:
+  level:
+    root: INFO #DEBUG
+    com.jd.boot001.mapper: DEBUG   #设置MyBatis的具体日志级别，指定MyBatis Mapper接口所在的包路径
+    #    path: /boot001/log   #只能指定路径，文件名默认为 spring.log，这里相当于window的 E:\boot001\log\spring.log
+    #    name: /boot001/log/my.log  #可以指定文件路径和文件名，这里相当于window的 E:\boot001\log\my.log
+    #name: my.log  #使用相对路径，这里相当于window的 E:\WorkPlace\IDEA\boot001\my.log
+

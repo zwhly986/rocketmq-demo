@@ -1,0 +1,43 @@
+1.数据库名 boot001
+
+2.脚本
+
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
+  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户密码',
+  `sex` enum('1','2') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户性别',
+  `birthday` date NULL DEFAULT NULL COMMENT '用户生日',
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户邮箱',
+  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户电话',
+  `addr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户地址',
+  `stop_flag` enum('1','0') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户启用标志',
+  `create_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '用户创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '用户更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+INSERT INTO `sys_user` VALUES (1, 'xiezhr', '程序员小凡', '12345678', '1', '1999-09-19', 'xiezhr@qq.com', '13288888888', '云南省昆明市', '0', '2023-09-04 21:08:32', NULL);
+INSERT INTO `sys_user` VALUES (2, 'xiaoqi', '程序员晓柒', '123456', '1', '2020-10-04', 'xiaoqi@163.com', '13288888888', '云南文山', '0', '2023-09-04 21:09:42', NULL);
+INSERT INTO `sys_user` VALUES (3, 'xiaodeng', '财务小邓', '123456', '2', '2019-09-04', 'xiaodeng@qq.com', '13588888888', '云南文山', '0', '2023-09-04 21:10:43', NULL);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
