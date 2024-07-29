@@ -1,10 +1,12 @@
 package com.jd.boot001.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.jd.boot001.common.R;
 import com.jd.boot001.entity.AccountChangeEvent;
 import com.jd.boot001.service.Bank1AccountInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.UUID;
 /**
  * 用户转账，银行1的账户向银行2的账户转账
  * RocketMQ事务消息测试，Producer端
+ * 2个账户在不同的数据库，这里为了方便放在一个库中，不同的2个表
  */
 @RestController
 @Slf4j
@@ -24,17 +27,24 @@ public class AccountInfoController {
     private static final Logger log = LoggerFactory.getLogger(AccountInfoController.class);
 
     @Autowired
-    private Bank1AccountInfoService accountInfoService;
+    private Bank1AccountInfoService bank1AccountInfoService;
 
-    // http://localhost:8080/boot001/transfer?accountNo=1&amount=0.11
+    /**
+     * http://localhost:8080/boot001/transfer?accountNo=1&amount=0.11
+     * accountNo：转出账户
+     * amount：转账金额
+     */
     @GetMapping(value = "/transfer")
     public R transfer(@RequestParam("accountNo") String accountNo, @RequestParam("amount") Double amount) {
         //创建一个事务id，作为消息内容发到mq
-        String tx_no = UUID.randomUUID().toString();
-        log.info("transfer,tx_no:{}",tx_no);
-        AccountChangeEvent accountChangeEvent = new AccountChangeEvent(accountNo, amount, tx_no);
+        String txNo = UUID.randomUUID().toString();
+        log.info("转账，事务ID为txNo:{}",txNo);
+
+        AccountChangeEvent accountChangeEvent = new AccountChangeEvent(accountNo, amount, txNo);
         //发送消息
-        accountInfoService.sendUpdateAccountBalance(accountChangeEvent);
-        return R.success().msg("转账成功");
+        TransactionSendResult result = bank1AccountInfoService.sendUpdateAccountBalance(accountChangeEvent);
+
+        return R.success().msg("转账消息发送结果：" + JSON.toJSONString(result));
     }
+
 }
