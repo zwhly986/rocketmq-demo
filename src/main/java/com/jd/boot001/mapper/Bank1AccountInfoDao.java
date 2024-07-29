@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
  * RocketMQ测试用例
  */
 @Mapper
-public interface AccountInfoDao {
+public interface Bank1AccountInfoDao {
 
     /**
      * 账户余额修改
@@ -15,7 +15,7 @@ public interface AccountInfoDao {
      * @param amount
      * @return
      */
-    @Update("update account_info set account_balance=account_balance+#{amount} where account_no=#{accountNo}")
+    @Update("update account_info_bank1 set account_balance=account_balance+#{amount} where account_no=#{accountNo}")
     int updateAccountBalance(@Param("accountNo") String accountNo, @Param("amount") Double amount);
 
     /**
@@ -23,7 +23,7 @@ public interface AccountInfoDao {
      * @param txNo
      * @return
      */
-    @Select("select count(1) from de_duplication where tx_no = #{txNo}")
+    @Select("select count(1) from de_duplication_bank1 where tx_no = #{txNo}")
     int isExistTx(String txNo);
 
     /**
@@ -31,7 +31,7 @@ public interface AccountInfoDao {
      * @param txNo
      * @return
      */
-    @Insert("insert into de_duplication values(#{txNo},now());")
+    @Insert("insert into de_duplication_bank1 values(#{txNo},now());")
     int addTx(String txNo);
 
 }

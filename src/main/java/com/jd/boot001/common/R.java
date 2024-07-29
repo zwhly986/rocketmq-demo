@@ -51,6 +51,21 @@ public class R extends HashMap<String, Object> implements Serializable {
         return map;
     }
 
+    public R code(String code) {
+        this.put(Const.CODE, code);
+        return this;
+    }
+
+    public R msg(String msg) {
+        this.put(Const.MSG, msg);
+        return this;
+    }
+
+    public R data(Object obj) {
+        this.put(Const.DATA, obj);
+        return this;
+    }
+
     public String getCode() {
         return code;
     }
