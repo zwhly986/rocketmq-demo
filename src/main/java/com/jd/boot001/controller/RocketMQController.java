@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * RocketMQ测试
+ * RocketMQ测试（For RocketMQ5.2.0）
  * 顺序消息发送（同步和异步）
  */
 @RestController
