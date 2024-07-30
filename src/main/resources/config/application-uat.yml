@@ -34,3 +34,10 @@ logging:
     #    name: /boot001/log/my.log  #可以指定文件路径和文件名，这里相当于window的 E:\boot001\log\my.log
     #name: my.log  #使用相对路径，这里相当于window的 E:\WorkPlace\IDEA\boot001\my.log
 
+# RocketMQ配置
+rocketmq:
+  name-server: 192.168.199.151:9876  # RocketMQ地址，根据实际修改
+  producer:
+    group: orderlyProducerGroup  # 随便给一个默认的生产者组，不填启动项目报错
+    # Field rocketMQTemplate in com.jd.boot001.utils.SendOrderlyMessage required a bean of type
+    # 'org.apache.rocketmq.spring.core.RocketMQTemplate' that could not be found.
