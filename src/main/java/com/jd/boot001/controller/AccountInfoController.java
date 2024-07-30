@@ -55,10 +55,14 @@ public class AccountInfoController {
         log.info("转账，事务ID为txNo:{}",txNo);
 
         AccountChangeEvent accountChangeEvent = new AccountChangeEvent(fromAccountNo, toAccountNo, amount, txNo);
-        //发送消息
+        // 发送消息（半消息，不可消费，Producer确认提交后Consumer才可消费）
         TransactionSendResult result = bank1AccountInfoService.sendUpdateAccountBalance(accountChangeEvent);
+        log.info("转账消息发送结果：" + JSON.toJSONString(result));
 
-        return R.success().msg("转账消息发送结果：" + JSON.toJSONString(result));
+        if ("SEND_OK".equals(result.getSendStatus())) {
+            return R.success().msg("转账消息发送成功");
+        }
+        return R.error("转账消息发送失败");
     }
 
 }
