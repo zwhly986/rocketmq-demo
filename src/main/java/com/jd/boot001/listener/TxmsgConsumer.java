@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jd.boot001.entity.AccountChangeEvent;
 import com.jd.boot001.service.Bank2AccountInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.slf4j.Logger;
@@ -25,7 +26,10 @@ public class TxmsgConsumer implements RocketMQListener<String> {
     @Autowired
     private Bank2AccountInfoService bank2AccountInfoService;
 
-    //接收消息
+    /**
+     * 接收消息，如何手工确认ack？
+     * @param message
+     */
     @Override
     public void onMessage(String message) {
         log.info("银行转账事务消息消费开始，消息：{}", message);
@@ -37,6 +41,18 @@ public class TxmsgConsumer implements RocketMQListener<String> {
         AccountChangeEvent accountChangeEvent = JSONObject.parseObject(accountChangeString, AccountChangeEvent.class);
         //设置账号为李四的
         //accountChangeEvent.setToAccountNo("2"); // TODO: 2024/7/30 不需要在此设置
+
+        String toAccountNo = accountChangeEvent.getToAccountNo();
+        Double amount = accountChangeEvent.getAmount();
+
+        if (StringUtils.isBlank(toAccountNo)) {
+            log.info("转入账户不能为空");
+            return;
+        }
+        if (amount == null) {
+            log.info("转账金额不能为空");
+            return;
+        }
 
         try {
             //更新本地账户，增加金额
