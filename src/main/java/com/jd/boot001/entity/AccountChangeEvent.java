@@ -9,25 +9,39 @@ import lombok.Data;
 @Data
 public class AccountChangeEvent {
 
-    private String accountNo;
+    /** 转出账户 */
+    private String fromAccountNo;
+    /** 转入账户 */
+    private String toAccountNo;
+    /** 转账金额 */
     private Double amount;
+    /** 事务消息编号 */
     private String txNo;
 
     public AccountChangeEvent() {
     }
 
-    public AccountChangeEvent(String accountNo, Double amount, String txNo) {
-        this.accountNo = accountNo;
+    public AccountChangeEvent(String fromAccountNo, String toAccountNo, Double amount, String txNo) {
+        this.fromAccountNo = fromAccountNo;
+        this.toAccountNo = toAccountNo;
         this.amount = amount;
         this.txNo = txNo;
     }
 
-    public String getAccountNo() {
-        return accountNo;
+    public String getFromAccountNo() {
+        return fromAccountNo;
     }
 
-    public void setAccountNo(String accountNo) {
-        this.accountNo = accountNo;
+    public void setFromAccountNo(String fromAccountNo) {
+        this.fromAccountNo = fromAccountNo;
+    }
+
+    public String getToAccountNo() {
+        return toAccountNo;
+    }
+
+    public void setToAccountNo(String toAccountNo) {
+        this.toAccountNo = toAccountNo;
     }
 
     public Double getAmount() {
@@ -45,5 +59,4 @@ public class AccountChangeEvent {
     public void setTxNo(String txNo) {
         this.txNo = txNo;
     }
-
 }

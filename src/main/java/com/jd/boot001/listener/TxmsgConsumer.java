@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 事务消息测试，Consumer端
+ * 事务消息消费，Consumer端
+ * 银行转账
  */
 @Component
 @Slf4j
@@ -27,16 +28,25 @@ public class TxmsgConsumer implements RocketMQListener<String> {
     //接收消息
     @Override
     public void onMessage(String message) {
-        log.info("开始消费消息:{}", message);
+        log.info("银行转账事务消息消费开始，消息：{}", message);
+
         //解析消息
         JSONObject jsonObject = JSONObject.parseObject(message);
         String accountChangeString = jsonObject.getString("accountChange");
         //转成AccountChangeEvent
         AccountChangeEvent accountChangeEvent = JSONObject.parseObject(accountChangeString, AccountChangeEvent.class);
         //设置账号为李四的
-        accountChangeEvent.setAccountNo("2");
-        //更新本地账户，增加金额
-        bank2AccountInfoService.addAccountInfoBalance(accountChangeEvent);
+        //accountChangeEvent.setToAccountNo("2"); // TODO: 2024/7/30 不需要在此设置
+
+        try {
+            //更新本地账户，增加金额
+            boolean isSuccess = bank2AccountInfoService.addAccountInfoBalance(accountChangeEvent);
+            log.info("银行转账事务消息消费，本地账户更新结果：{}", isSuccess);
+        } catch (Exception e) {
+            log.error("银行转账事务消息消费，本地账户更新失败，{}", e.getMessage(), e);
+        }
+
+        log.info("银行转账事务消息消费结束");
     }
 
 }

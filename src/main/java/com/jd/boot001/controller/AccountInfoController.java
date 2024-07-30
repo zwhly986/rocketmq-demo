@@ -6,6 +6,7 @@ import com.jd.boot001.common.R;
 import com.jd.boot001.entity.AccountChangeEvent;
 import com.jd.boot001.service.Bank1AccountInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +31,30 @@ public class AccountInfoController {
     private Bank1AccountInfoService bank1AccountInfoService;
 
     /**
-     * http://localhost:8080/boot001/transfer?accountNo=1&amount=0.11
+     * http://localhost:8080/boot001/transfer?fromAccountNo=1&toAccountNo=2&amount=0.11
      * accountNo：转出账户
      * amount：转账金额
      */
     @GetMapping(value = "/transfer")
-    public R transfer(@RequestParam("accountNo") String accountNo, @RequestParam("amount") Double amount) {
+    public R transfer(@RequestParam("fromAccountNo") String fromAccountNo,
+                      @RequestParam("toAccountNo") String toAccountNo,
+                      @RequestParam("amount") Double amount) {
+        // 入参校验
+        if (StringUtils.isBlank(fromAccountNo)) {
+            return R.error("转出账户不能为空");
+        }
+        if (StringUtils.isBlank(toAccountNo)) {
+            return R.error("转入账户不能为空");
+        }
+        if (amount == null) {
+            return R.error("转账金额不能为空");
+        }
+
         //创建一个事务id，作为消息内容发到mq
         String txNo = UUID.randomUUID().toString();
         log.info("转账，事务ID为txNo:{}",txNo);
 
-        AccountChangeEvent accountChangeEvent = new AccountChangeEvent(accountNo, amount, txNo);
+        AccountChangeEvent accountChangeEvent = new AccountChangeEvent(fromAccountNo, toAccountNo, amount, txNo);
         //发送消息
         TransactionSendResult result = bank1AccountInfoService.sendUpdateAccountBalance(accountChangeEvent);
 
