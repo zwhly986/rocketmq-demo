@@ -16,8 +16,11 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Service
-@RocketMQMessageListener(topic = Const.ORDERLY_TOPIC, consumerGroup = Const.ORDERLY_CONSUMER_GROUP,
-        consumeMode = ConsumeMode.ORDERLY)
+@RocketMQMessageListener(
+        topic = Const.ORDERLY_TOPIC,
+        consumerGroup = Const.ORDERLY_CONSUMER_GROUP,
+        consumeMode = ConsumeMode.ORDERLY
+)
 public class OrderMessageConsumer implements RocketMQListener<String> {
     private static final Logger log = LoggerFactory.getLogger(OrderMessageConsumer.class);
 

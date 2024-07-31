@@ -75,7 +75,7 @@ public class Bank1AccountInfoServiceImpl implements Bank1AccountInfoService {
         }
 
         //扣减金额
-        int i = bank1AccountInfoDao.updateAccountBalance(accountChangeEvent.getAccountNo(), accountChangeEvent.getAmount() * -1);
+        int i = bank1AccountInfoDao.updateAccountBalance(accountChangeEvent.getFromAccountNo(), accountChangeEvent.getAmount() * -1);
         //添加事务日志
         int j = bank1AccountInfoDao.addTx(accountChangeEvent.getTxNo());
         log.info("doUpdateAccountBalance,txNo:{}",accountChangeEvent.getTxNo());

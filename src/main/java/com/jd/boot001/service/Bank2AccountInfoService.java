@@ -5,6 +5,6 @@ import com.jd.boot001.entity.AccountChangeEvent;
 public interface Bank2AccountInfoService {
 
     //更新账户，增加金额
-    void addAccountInfoBalance(AccountChangeEvent accountChangeEvent);
+    boolean addAccountInfoBalance(AccountChangeEvent accountChangeEvent);
 
 }
