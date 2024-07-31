@@ -2,7 +2,7 @@ package com.jd.boot001.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jd.boot001.entity.AccountChangeEvent;
-import com.jd.boot001.mapper.Bank1AccountInfoDao;
+import com.jd.boot001.mapper.Bank1AccountInfoMapper;
 import com.jd.boot001.service.Bank1AccountInfoService;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.rocketmq.common.message.Message;
@@ -26,7 +26,7 @@ public class Bank1AccountInfoServiceImpl implements Bank1AccountInfoService {
     private static final Logger log = LoggerFactory.getLogger(Bank1AccountInfoServiceImpl.class);
 
     @Autowired
-    private Bank1AccountInfoDao bank1AccountInfoDao;
+    private Bank1AccountInfoMapper bank1AccountInfoDao;
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
