@@ -41,6 +41,10 @@ public class ManualAckConsumerListener {
     private Bank2AccountInfoService bank2AccountInfoService;
 
 
+    /**
+     * @EventListener注解：指定Springboot启动后要执行的方法，实现同样的功能可以实现CommandLineRunner或ApplicationRunner接口
+     * @throws MQClientException
+     */
     @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() throws MQClientException {
         // SpringBoot启动完成后要执行的操作
