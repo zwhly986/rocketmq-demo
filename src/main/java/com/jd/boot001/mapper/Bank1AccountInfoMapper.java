@@ -3,11 +3,11 @@ package com.jd.boot001.mapper;
 import org.apache.ibatis.annotations.*;
 
 /**
- * 操作银行2的账户
+ * 用户账户操作
  * RocketMQ测试用例
  */
 @Mapper
-public interface Bank2AccountInfoDao {
+public interface Bank1AccountInfoMapper {
 
     /**
      * 账户余额修改
@@ -15,7 +15,7 @@ public interface Bank2AccountInfoDao {
      * @param amount
      * @return
      */
-    @Update("update account_info_bank2 set account_balance=account_balance+#{amount} where account_no=#{accountNo}")
+    @Update("update account_info_bank1 set account_balance=account_balance+#{amount} where account_no=#{accountNo}")
     int updateAccountBalance(@Param("accountNo") String accountNo, @Param("amount") Double amount);
 
     /**
@@ -23,7 +23,7 @@ public interface Bank2AccountInfoDao {
      * @param txNo
      * @return
      */
-    @Select("select count(1) from de_duplication_bank2 where tx_no = #{txNo}")
+    @Select("select count(1) from de_duplication_bank1 where tx_no = #{txNo}")
     int isExistTx(String txNo);
 
     /**
@@ -31,7 +31,7 @@ public interface Bank2AccountInfoDao {
      * @param txNo
      * @return
      */
-    @Insert("insert into de_duplication_bank2 values(#{txNo},now());")
+    @Insert("insert into de_duplication_bank1 values(#{txNo},now());")
     int addTx(String txNo);
 
 }

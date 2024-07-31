@@ -3,7 +3,7 @@ package com.jd.boot001.listener;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jd.boot001.entity.AccountChangeEvent;
-import com.jd.boot001.mapper.Bank1AccountInfoDao;
+import com.jd.boot001.mapper.Bank1AccountInfoMapper;
 import com.jd.boot001.service.Bank1AccountInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQTransactionListener;
@@ -30,7 +30,7 @@ public class ProducerTxmsgListener implements RocketMQLocalTransactionListener {
     private Bank1AccountInfoService accountInfoService;
 
     @Autowired
-    private Bank1AccountInfoDao bank1AccountInfoDao;
+    private Bank1AccountInfoMapper bank1AccountInfoDao;
 
     /**
      * 事务消息发送后的回调方法，当消息发送给mq成功，此方法被回调，但是消息还处于未消费状态(不能消费)
