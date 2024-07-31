@@ -33,12 +33,12 @@ public class Bank2AccountInfoServiceImpl implements Bank2AccountInfoService {
         //添加事务记录，用于幂等
         int j = bank2AccountInfoDao.addTx(accountChangeEvent.getTxNo());
 
-        if (i == 1 && j == 1) {
-            return true;
-        }
-
         if (accountChangeEvent.getAmount() == 4) { // TODO: 2024/7/30 测试代码，去掉
             throw new RuntimeException("人为制造异常");
+        }
+
+        if (i == 1 && j == 1) {
+            return true;
         }
 
         throw new RuntimeException("账户金额更新失败");

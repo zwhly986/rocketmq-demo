@@ -14,12 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 事务消息消费，Consumer端
+ * 事务消息消费，消费者端
  * 银行转账
  */
-@Component
 @Slf4j
-@RocketMQMessageListener(consumerGroup = "consumer_group_txmsg_bank2", topic = "topic_txmsg")
+@Component
+//@RocketMQMessageListener(consumerGroup = "consumer_group_txmsg_bank2", topic = "topic_txmsg")
+// TODO: 2024/7/30 nameServer若读取默认值，可省略该配置项，如下所示
+@RocketMQMessageListener(
+        nameServer="${rocketmq.name-server}",
+        consumerGroup = "consumer_group_txmsg_bank2",
+        topic = "topic_txmsg"
+)
 public class TxmsgConsumer implements RocketMQListener<String> {
     private static final Logger log = LoggerFactory.getLogger(TxmsgConsumer.class);
 
@@ -39,10 +45,10 @@ public class TxmsgConsumer implements RocketMQListener<String> {
         String accountChangeString = jsonObject.getString("accountChange");
         //转成AccountChangeEvent
         AccountChangeEvent accountChangeEvent = JSONObject.parseObject(accountChangeString, AccountChangeEvent.class);
-        //设置账号为李四的
-        //accountChangeEvent.setToAccountNo("2"); // TODO: 2024/7/30 不需要在此设置
 
+        // 收款账号
         String toAccountNo = accountChangeEvent.getToAccountNo();
+        // 转账金额
         Double amount = accountChangeEvent.getAmount();
 
         if (StringUtils.isBlank(toAccountNo)) {

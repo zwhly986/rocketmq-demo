@@ -7,6 +7,7 @@ import com.jd.boot001.entity.AccountChangeEvent;
 import com.jd.boot001.service.Bank1AccountInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -58,8 +60,9 @@ public class AccountInfoController {
         // 发送消息（半消息，不可消费，Producer确认提交后Consumer才可消费）
         TransactionSendResult result = bank1AccountInfoService.sendUpdateAccountBalance(accountChangeEvent);
         log.info("转账消息发送结果：" + JSON.toJSONString(result));
+        log.info(">>>>result.getSendStatus() = " + result.getSendStatus());
 
-        if ("SEND_OK".equals(result.getSendStatus())) {
+        if (SendStatus.SEND_OK == result.getSendStatus()) {
             return R.success().msg("转账消息发送成功");
         }
         return R.error("转账消息发送失败");
