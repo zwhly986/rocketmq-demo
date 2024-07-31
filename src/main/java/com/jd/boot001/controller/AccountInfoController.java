@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * 用户转账，银行1的账户向银行2的账户转账
+ * 跨行转账，银行1的账户向银行2的账户转账
  * RocketMQ事务消息测试，Producer端
  * 2个账户在不同的数据库，这里为了方便放在一个库中，不同的2个表
  */

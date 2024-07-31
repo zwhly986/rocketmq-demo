@@ -1,6 +1,38 @@
 1.参考资料：
 https://blog.csdn.net/qq_53070263/article/details/137252721
 
+2.数据源Druid
+
+3.RocketMQ范例：事务消息、顺序消息
+
+4.数据库MySQL5.7.41，创建库boot001，脚本见文件mysql.txt
+
+
+5.#[开发端口8069，是rocketmq-dashboard的端口，供外部访问]
+  iptables -I INPUT -p tcp --dport 8069 -j ACCEPT
+
+#文件rocketmq-dashboard.service
+#开机自动启动rocketmq-dashboard
+
+[Unit]
+Description=Java Jar Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/java/jdk1.8.0_261/bin/java -jar /home/hua/rocketmq/rocketmq-dashboard-1.0.1-SNAPSHOT.jar
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+
+
 
 
 

@@ -19,13 +19,13 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-//@RocketMQMessageListener(consumerGroup = "consumer_group_txmsg_bank2", topic = "topic_txmsg")
+// 可用，不用 @RocketMQMessageListener(consumerGroup = "consumer_group_txmsg_bank2", topic = "topic_txmsg")
 // TODO: 2024/7/30 nameServer若读取默认值，可省略该配置项，如下所示
-@RocketMQMessageListener(
+/*@RocketMQMessageListener(
         nameServer="${rocketmq.name-server}",
         consumerGroup = "consumer_group_txmsg_bank2",
         topic = "topic_txmsg"
-)
+)*/
 public class TxmsgConsumer implements RocketMQListener<String> {
     private static final Logger log = LoggerFactory.getLogger(TxmsgConsumer.class);
 
