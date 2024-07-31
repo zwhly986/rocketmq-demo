@@ -25,7 +25,7 @@ public class Bank2AccountInfoServiceImpl implements Bank2AccountInfoService {
         log.info("bank2更新本地账号，账号：{},金额：{}", accountChangeEvent.getToAccountNo(), accountChangeEvent.getAmount());
 
         if (bank2AccountInfoDao.isExistTx(accountChangeEvent.getTxNo()) > 0) {
-            return false;
+            return true; // 之前已经消费成功的，直接返回成功
         }
 
         //增加金额

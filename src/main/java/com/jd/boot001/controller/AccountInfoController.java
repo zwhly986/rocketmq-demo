@@ -63,7 +63,7 @@ public class AccountInfoController {
         log.info(">>>>result.getSendStatus() = " + result.getSendStatus());
 
         if (SendStatus.SEND_OK == result.getSendStatus()) {
-            return R.success().msg("转账消息发送成功");
+            return R.success().msg("跨行转账消息发送成功");
         }
         return R.error("转账消息发送失败");
     }
