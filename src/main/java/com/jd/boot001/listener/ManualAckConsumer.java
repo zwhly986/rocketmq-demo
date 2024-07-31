@@ -12,7 +12,9 @@ import java.util.List;
 
 /**
  * RocketMQ消费手动确认，可行
+ * Demo测试用，逻辑迁移至ManualAckConsumerListener
  */
+@Deprecated
 public class ManualAckConsumer {
 
     public static void main(String[] args) throws MQClientException {
