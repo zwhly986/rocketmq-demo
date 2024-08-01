@@ -90,13 +90,14 @@ public class RocketMQProducerController {
      * 发送同步消息
      * http://localhost:8080/boot001/rocketMQProducer/send/sync/同步消息001
      *
+     * 监听器：SyncMsgListener
      * @param msg
      * @return
      */
     @GetMapping("/send/sync/{msg}")
     public String sendSyncMessage(@PathVariable String msg) {
         SendResult result = rocketMQTemplate.syncSend("syncTopic", msg);
-        return "发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId();
+        return "同步消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId();
     }
 
 
