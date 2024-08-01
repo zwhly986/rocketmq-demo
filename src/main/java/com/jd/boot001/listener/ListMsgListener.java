@@ -13,7 +13,7 @@ import java.util.List;
  * 集合消息监听器
  */
 @Component
-//@RocketMQMessageListener(topic = "listTopic", consumerGroup = "list-topic-consumer")
+@RocketMQMessageListener(topic = "listTopic", consumerGroup = "list-topic-consumer")
 public class ListMsgListener implements RocketMQListener<List<Order>> {
     private static final Logger log = LoggerFactory.getLogger(ListMsgListener.class);
 

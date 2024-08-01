@@ -151,17 +151,17 @@ public class RocketMQProducerController {
      */
     @GetMapping("/send/delay/{msg}")
     public String sendDelayMessage(@PathVariable String msg) {
-        Message<String> message = MessageBuilder.withPayload(msg).build();
+        Message<String> message = MessageBuilder.withPayload(msg + "[发送时间：" + DateUtils.date() + "]").build();
         // 延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
-        SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 3);
-        return "发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
+        SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 5);
+        return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
     }
 
 
     /**
      * 发送顺序消息
      * http://localhost:8080/boot001/rocketMQProducer/send/orderly
-     *
+     * 监听器：OrderMsgListener
      * 重载方法：
      * syncSendOrderly 发送同步顺序消息
      * asyncSendOrderly 发送异步同步消息
