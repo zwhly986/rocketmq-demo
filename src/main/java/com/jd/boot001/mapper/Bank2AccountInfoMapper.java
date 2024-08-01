@@ -1,5 +1,6 @@
 package com.jd.boot001.mapper;
 
+import com.jd.boot001.entity.AccountChangeEvent;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +34,15 @@ public interface Bank2AccountInfoMapper {
      * @param txNo
      * @return
      */
-    @Insert("insert into de_duplication_bank2 values(#{txNo},now());")
-    int addTx(String txNo);
+//    @Insert("insert into de_duplication_bank2(tx_no, create_time, from_account, to_account, amount) values(#{txNo},now(),#{fromAccount}, #{toAccount}, #{amount});")
+//    int addTx(@Param("txNo") String txNo, @Param("fromAccount") String fromAccount, @Param("toAccount") String toAccount, @Param("amount") Double amount);
 
+
+    /**
+     * 新增事务id（用于RocketMQ事务回查）
+     * @param accountChangeEvent
+     * @return
+     */
+    @Insert("insert into de_duplication_bank2(tx_no, create_time, from_account, to_account, amount) values (#{ev.txNo},now(),#{ev.fromAccountNo}, #{ev.toAccountNo}, #{ev.amount});")
+    int addTx(@Param("ev") AccountChangeEvent accountChangeEvent);
 }

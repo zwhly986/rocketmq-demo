@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.jd.boot001.*")
 //@MapperScan(value = {"com.jd.boot001.**.mapper"})
-@MapperScan(value = {"com.jd.boot001.mapper"})
+@MapperScan(value = {"com.jd.boot001.mapper"}) // 有此注解，则不需要在保包中mapper接口上添加@Mapper或@Repository
 public class Boot001Application implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(Boot001Application.class);
 
@@ -31,6 +31,7 @@ public class Boot001Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("SpringBoot启动成功");
+        // 在此添加Springboot启动后要执行的操作
     }
 
 }

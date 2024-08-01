@@ -30,8 +30,11 @@ public class Bank2AccountInfoServiceImpl implements Bank2AccountInfoService {
 
         //增加金额
         int i = bank2AccountInfoDao.updateAccountBalance(accountChangeEvent.getToAccountNo(), accountChangeEvent.getAmount());
+
         //添加事务记录，用于幂等
-        int j = bank2AccountInfoDao.addTx(accountChangeEvent.getTxNo());
+        int j = bank2AccountInfoDao.addTx(accountChangeEvent);
+//        int j = bank2AccountInfoDao.addTx(accountChangeEvent.getTxNo(), accountChangeEvent.getFromAccountNo(),
+//                accountChangeEvent.getToAccountNo(), accountChangeEvent.getAmount());
 
         if (accountChangeEvent.getAmount() == 4) { // TODO: 2024/7/30 测试代码，去掉
             throw new RuntimeException("人为制造异常");
