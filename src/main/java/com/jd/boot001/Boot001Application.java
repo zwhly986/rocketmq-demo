@@ -3,8 +3,6 @@ package com.jd.boot001;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,7 +29,7 @@ public class Boot001Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("SpringBoot启动成功");
-        // 在此添加Springboot启动后要执行的操作
+        // 在此添加Springboot启动后要执行的操作 // TODO: 2024/8/1
     }
 
 }

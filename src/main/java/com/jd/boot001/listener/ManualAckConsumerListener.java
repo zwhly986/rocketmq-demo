@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * RocketMQ消费手动确认，可行
+ * 消费手动确认，可行
  */
 @Component
 public class ManualAckConsumerListener {

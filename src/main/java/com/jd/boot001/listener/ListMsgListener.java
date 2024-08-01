@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * RocketMQ集合消息监听器
+ * 集合消息监听器
  */
 @Component
 //@RocketMQMessageListener(topic = "listTopic", consumerGroup = "list-topic-consumer")

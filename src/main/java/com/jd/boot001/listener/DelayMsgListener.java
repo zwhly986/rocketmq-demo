@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * 延迟消息监听器
+ * 延迟消息--监听器
  */
 @Component
 //@RocketMQMessageListener(topic = "delayTopic", consumerGroup = "boot-mq-group-consumer")

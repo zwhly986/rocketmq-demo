@@ -22,8 +22,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * RocketMQ测试（For RocketMQ5.2.0）
- * 1.顺序消息发送（同步和异步）
+ * RocketMQ消息发送 (For RocketMQ5.2.0)
+ * 1.顺序消息发送（同步、异步、oneWay）
+ * 2.延迟消息
+ * 3.顺序消息
+ * 4.批量消息发送
  */
 @RestController
 @RequestMapping("/rocketMQProducer")
@@ -31,10 +34,10 @@ public class RocketMQProducerController {
     private static final Logger log = LoggerFactory.getLogger(RocketMQProducerController.class);
 
     @Autowired
-    private SendOrderlyMessage sendOrderlyMessage;
+    private RocketMQTemplate rocketMQTemplate;
 
     @Autowired
-    private RocketMQTemplate rocketMQTemplate;
+    private SendOrderlyMessage sendOrderlyMessage;
 
     /**
      * 同步发送消息
@@ -62,7 +65,7 @@ public class RocketMQProducerController {
     /**
      * Tag过滤：主题相同的情况下，如果消费者订阅的Tag和发送者设置的消息Tag相互匹配，则消息被投递给消费端进行消费。
      * http://localhost:8080/boot001/rocketMQProducer/send/tag
-     *
+     * 监听器：TagTopicMsgListener
      * @return
      */
     @GetMapping("/send/tag")
@@ -73,12 +76,13 @@ public class RocketMQProducerController {
          *
          * 消息主题：tagTopic
          * 消息标签Tag：java
-         * 消息内容：这是一个带有 java tag 的消息
+         * 参数一：topic，如果想添加tag，可以使用"topic:tag"写法
+         * 参数二：消息内容
          * 消息主题相同，且消费者订阅的Tag和发送者设置的消息Tag相互匹配，则消息被投递给消费端进行消费
          * topic如果想加标签，写法是topic:tag
          */
-        SendResult result = rocketMQTemplate.syncSend("tagTopic:java", "这是一个带有 java tag 的消息");
-        return "发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId();
+        SendResult result = rocketMQTemplate.syncSend("tagTopic:java", "这是一个带有 java tag 的消息 " + DateUtils.date());
+        return "带标签的消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId();
     }
 
 
@@ -157,6 +161,10 @@ public class RocketMQProducerController {
      * 发送顺序消息
      * http://localhost:8080/boot001/rocketMQProducer/send/orderly
      *
+     * 重载方法：
+     * syncSendOrderly 发送同步顺序消息
+     * asyncSendOrderly 发送异步同步消息
+     * sendOneWayOrderly 发送单向顺序消息
      * @return
      */
     @GetMapping("/send/orderly")
@@ -175,9 +183,13 @@ public class RocketMQProducerController {
                 new Order(orderId2, "物流", "3"),
                 new Order(orderId2, "签收", "4")
         );
+
         //控制流程：下订单->发短信->物流->签收
         //将 orderId 作为 hashKey，这样 orderId 相同的会放在同一个队列里面，顺序消费 // TODO: 2024/8/1 超重点（一个主题对应多个队列，保证数据顺序消费且消息不积压）
         orders.forEach(order -> {
+            // 参数一：topic，如果想添加tag，可以使用"topic:tag"写法
+            // 参数二：消息内容
+            // 参数三：hashkey，使用此参数选择队列
             rocketMQTemplate.syncSendOrderly("orderlyMsgTopic", order, order.getOrderId());
         });
         return "顺序消息发送成功";
@@ -206,7 +218,7 @@ public class RocketMQProducerController {
 
     /**
      * 发送集合消息
-     *  http://localhost:8080/boot001/rocketMQProducer/send/list
+     * http://localhost:8080/boot001/rocketMQProducer/send/list
      *
      * @return
      */
