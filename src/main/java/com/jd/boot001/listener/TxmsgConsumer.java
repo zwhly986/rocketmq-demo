@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
         consumerGroup = "consumer_group_txmsg_bank2",
         topic = "topic_txmsg"
 )*/
-public class TxmsgConsumer implements RocketMQListener<String> {
+public class TxmsgConsumer implements RocketMQListener<String> { // 泛型指定接收到的消息类型为String
     private static final Logger log = LoggerFactory.getLogger(TxmsgConsumer.class);
 
     @Autowired

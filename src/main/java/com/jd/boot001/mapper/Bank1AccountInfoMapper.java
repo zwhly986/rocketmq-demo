@@ -1,12 +1,14 @@
 package com.jd.boot001.mapper;
 
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 
 /**
  * 用户账户操作
  * RocketMQ测试用例
  */
-@Mapper
+@Repository
+//@Mapper
 public interface Bank1AccountInfoMapper {
 
     /**

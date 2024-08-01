@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 银行转账
  */
-@Service
 @Slf4j
+@Service
 public class Bank1AccountInfoServiceImpl implements Bank1AccountInfoService {
     private static final Logger log = LoggerFactory.getLogger(Bank1AccountInfoServiceImpl.class);
 
