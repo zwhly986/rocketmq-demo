@@ -104,7 +104,7 @@ public class RocketMQProducerController {
     /**
      * 发送异步消息
      * http://localhost:8080/boot001/rocketMQProducer/send/async/异步消息002
-     *
+     * 监听器：AsyncMsgListener
      * @param msg
      * @return
      */
@@ -130,7 +130,7 @@ public class RocketMQProducerController {
     /**
      * 发送单向信息
      * http://localhost:8080/boot001/rocketMQProducer/send/oneWay/单向消息003
-     *
+     * 监听器：OneWayMsgListener
      * @param msg
      * @return
      */
