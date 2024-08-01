@@ -20,12 +20,12 @@ import org.springframework.stereotype.Component;
 // topic:要订阅的RocketMQ主题
 // selectorExpression：指定标签（Tag），selectorExpression属性设置的标签与消息的标签相匹配时，onMessage方法才会被调用
 // consumerGroup：费者组的名称
-@RocketMQMessageListener(
+/*@RocketMQMessageListener(
         topic = "tagTopic", // 消息主题
         selectorType = SelectorType.TAG,
         selectorExpression = "java", // 消息标签，主题相同，且消费者订阅的Tag和发送者设置的消息Tag相互匹配，则消息被投递给消费端进行消费
         consumerGroup = "boot-mq-group-consumer"  // 消费者组
-)
+)*/
 public class MQMsgListener implements RocketMQListener<MessageExt> {
     private static final Logger log = LoggerFactory.getLogger(MQMsgListener.class);
 

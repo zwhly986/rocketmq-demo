@@ -13,9 +13,11 @@ import org.springframework.stereotype.Component;
  * RocketMQ顺序消息监听器
  */
 @Component
-@RocketMQMessageListener(topic = "orderlyMsgTopic",
+/*@RocketMQMessageListener(
+        topic = "orderlyMsgTopic",
         consumerGroup = "boot-mq-group-consumer",
-        consumeMode = ConsumeMode.ORDERLY)
+        consumeMode = ConsumeMode.ORDERLY
+)*/
 public class OrderMsgListener implements RocketMQListener<Order> {
     private static final Logger log = LoggerFactory.getLogger(OrderMsgListener.class);
 

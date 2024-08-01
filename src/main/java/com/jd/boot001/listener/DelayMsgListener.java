@@ -15,7 +15,7 @@ import java.util.Date;
  * 延迟消息监听器
  */
 @Component
-@RocketMQMessageListener(topic = "delayTopic", consumerGroup = "boot-mq-group-consumer")
+//@RocketMQMessageListener(topic = "delayTopic", consumerGroup = "boot-mq-group-consumer")
 public class DelayMsgListener implements RocketMQListener<MessageExt> {
     private static final Logger log = LoggerFactory.getLogger(DelayMsgListener.class);
 
