@@ -7,12 +7,13 @@ https://blog.csdn.net/qq_53070263/article/details/137252721
 
 4.数据库MySQL5.7.41，创建库boot001，脚本见文件mysql.txt
 
+5.
+# [开发端口8069，是rocketmq-dashboard的端口，供外部访问]
+iptables -I INPUT -p tcp --dport 8069 -j ACCEPT
 
-5.#[开发端口8069，是rocketmq-dashboard的端口，供外部访问]
-  iptables -I INPUT -p tcp --dport 8069 -j ACCEPT
-
-#文件rocketmq-dashboard.service
-#开机自动启动rocketmq-dashboard
+6.
+# 添加文件/etc/systemd/system/rocketmq-dashboard.service，文件名可自行设定
+# 目的是设定centos开机时自动启动rocketmq-dashboard
 
 [Unit]
 Description=Java Jar Service
@@ -27,6 +28,10 @@ User=root
 [Install]
 WantedBy=multi-user.target
 
+然后执行命令：
+sudo systemctl daemon-reload
+sudo systemctl enable rocketmq-dashboard.service
+sudo systemctl start rocketmq-dashboard.service
 
 
 
