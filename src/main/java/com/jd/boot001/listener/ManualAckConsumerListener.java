@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * RocketMQ消费手动确认，可行
+ * 消费手动确认，可行
  */
 @Component
 public class ManualAckConsumerListener {
@@ -45,7 +45,7 @@ public class ManualAckConsumerListener {
      * @EventListener注解：指定Springboot启动后要执行的方法，实现同样的功能可以实现CommandLineRunner或ApplicationRunner接口
      * @throws MQClientException
      */
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     public void onApplicationReady() throws MQClientException {
         // SpringBoot启动完成后要执行的操作
         log.info("springboot启动完成，注册RocketMQ消费者");

@@ -20,9 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
  * RocketMQ事务消息测试，Producer端添加
  */
 @Component
-@Slf4j
-//@RocketMQTransactionListener(txProducerGroup = "producer_group_txmsg_bank1") // TODO: 2024/7/29 修改前 
-@RocketMQTransactionListener//(txProducerGroup = "producer_group_txmsg_bank1")  // TODO: 2024/7/29 修改后
+@Slf4j  //@RocketMQTransactionListener(txProducerGroup = "producer_group_txmsg_bank1") // TODO: 2024/7/29 修改前
+//@RocketMQTransactionListener//(txProducerGroup = "producer_group_txmsg_bank1")  // TODO: 2024/7/29 修改后
 public class ProducerTxmsgListener implements RocketMQLocalTransactionListener {
     private static final Logger log = LoggerFactory.getLogger(ProducerTxmsgListener.class);
 
