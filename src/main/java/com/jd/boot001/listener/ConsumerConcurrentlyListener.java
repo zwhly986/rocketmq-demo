@@ -1,5 +1,6 @@
 package com.jd.boot001.listener;
 
+import com.jd.boot001.utils.DateUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.*;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -40,7 +41,8 @@ public class ConsumerConcurrentlyListener {
         //设置实例名称，一个jvm中有多个消费者可以根据实例名区分，默认DEFAULT
         consumer.setInstanceName("rmq-instance");
         // 参数一：topic，参数二：标签
-        consumer.subscribe("tagTopic", "java");
+        //consumer.subscribe("tagTopic", "java");
+        consumer.subscribe("delayTopic", "*"); // 所有标签
 
         // 方法一：并发消费
         /*
@@ -78,7 +80,7 @@ public class ConsumerConcurrentlyListener {
         consumer.setConsumeThreadMin(1);
 
         // 2 以批量方式进行消费 //设置消息批处理的一个批次中消息的最大个数
-        consumer.setConsumeMessageBatchMaxSize(1); // 10
+        consumer.setConsumeMessageBatchMaxSize(20); // 10
         // 设置重试次数 默认16次
         consumer.setMaxReconsumeTimes(1);
 
@@ -87,14 +89,15 @@ public class ConsumerConcurrentlyListener {
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgList, ConsumeOrderlyContext context) {
                 MessageQueue messageQueue = context.getMessageQueue();
 
+                // 读到的数据是乱序的
                 for (MessageExt msg : msgList) {
-                    log.info("顺序消费数据：" + new String(msg.getBody()));
+//                    log.info("顺序消费数据：" + new String(msg.getBody()));
+                    log.info("消息内容：{}：{}", new String(msg.getBody()), DateUtils.date());
                 }
                 // 消费成功
-                //return ConsumeOrderlyStatus.SUCCESS;
+                return ConsumeOrderlyStatus.SUCCESS;
                 // 消费失败
-                return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
-                //return null;
+                //return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
             }
         });
 

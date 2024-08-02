@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
  * 延迟消息--监听器
  */
 @Component
-@RocketMQMessageListener(topic = "delayTopic", consumerGroup = "delay-topic-group-consumer")
+//@RocketMQMessageListener(topic = "delayTopic", consumerGroup = "delay-topic-group-consumer")
 public class DelayMsgListener implements RocketMQListener<MessageExt> {
     private static final Logger log = LoggerFactory.getLogger(DelayMsgListener.class);
 
     @Override
     public void onMessage(MessageExt message) {
-        log.info("延迟消息接收[{}]：{}", DateUtils.date(), JSON.toJSONString(message));
+        //log.info("延迟消息接收[{}]：{}", DateUtils.date(), JSON.toJSONString(message));
 
         String msgId = message.getMsgId();
         String msg = new String(message.getBody());

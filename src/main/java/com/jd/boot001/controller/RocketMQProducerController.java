@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -187,7 +188,7 @@ public class RocketMQProducerController {
 
         return "延迟消息异步发送完成：" + DateUtils.date();
 
-        // 3.单向发送
+        // 3.延长时间任意 // TODO: 2024/8/2
 
 
     }
