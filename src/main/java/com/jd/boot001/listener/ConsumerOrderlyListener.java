@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 消费手动确认，可行 // TODO: 2024/8/2 并发接收消息参考MQConsumer
  */
-@Component
+//@Component
 public class ConsumerOrderlyListener {
     private static final Logger log = LoggerFactory.getLogger(ConsumerOrderlyListener.class);
 

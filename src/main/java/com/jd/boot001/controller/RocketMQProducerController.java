@@ -156,9 +156,33 @@ public class RocketMQProducerController {
     @GetMapping("/send/delay/{msg}")
     public String sendDelayMessage(@PathVariable String msg) {
         Message<String> message = MessageBuilder.withPayload(msg + "[发送时间：" + DateUtils.date() + "]").build();
-        // 延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
-        SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 5);
-        return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
+        /*
+        参数三：延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
+        delayLevel = 0：非延迟消息
+        */
+        // 1.同步发送
+        //SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 5);
+        //return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
+
+
+        // 2.异步发送
+        rocketMQTemplate.asyncSend("delayTopic", message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("延迟消息异步发送成功");
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                log.error("延迟消息异步发送失败");
+            }
+        }, 2000, 5);
+
+        return "延迟消息发送完成：" + DateUtils.date();
+
+        // 3.单向发送
+
+
     }
 
 
