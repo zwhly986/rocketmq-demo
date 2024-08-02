@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * RocketMQ消息发送 (For RocketMQ5.2.0)
@@ -32,6 +33,8 @@ import java.util.UUID;
 @RequestMapping("/rocketMQProducer")
 public class RocketMQProducerController {
     private static final Logger log = LoggerFactory.getLogger(RocketMQProducerController.class);
+
+    private static final AtomicLong atomicLong = new AtomicLong(0);
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
@@ -155,10 +158,13 @@ public class RocketMQProducerController {
      */
     @GetMapping("/send/delay/{msg}")
     public String sendDelayMessage(@PathVariable String msg) {
-        Message<String> message = MessageBuilder.withPayload(msg + "[发送时间：" + DateUtils.date() + "]").build();
+        long num = atomicLong.getAndIncrement();
+        String msgx = String.format("%s[%d][发送时间：%s]", msg, num, DateUtils.date());
+        Message<String> message = MessageBuilder.withPayload(msgx).build();
+
         /*
-        参数三：延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
-        delayLevel = 0：非延迟消息
+        参数四：延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
+        设置延迟消费时间，设置延迟时间级别0,18,0表示不延迟，18表示延迟2h，大于18的都是2h
         */
         // 1.同步发送
         //SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 5);
@@ -166,6 +172,7 @@ public class RocketMQProducerController {
 
 
         // 2.异步发送
+        // 延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
         rocketMQTemplate.asyncSend("delayTopic", message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
@@ -176,9 +183,9 @@ public class RocketMQProducerController {
             public void onException(Throwable throwable) {
                 log.error("延迟消息异步发送失败");
             }
-        }, 2000, 5);
+        }, 2000, 3);
 
-        return "延迟消息发送完成：" + DateUtils.date();
+        return "延迟消息异步发送完成：" + DateUtils.date();
 
         // 3.单向发送
 
