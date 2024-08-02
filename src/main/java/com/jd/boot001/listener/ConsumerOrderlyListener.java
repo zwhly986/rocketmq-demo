@@ -22,11 +22,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * 消费手动确认，可行
+ * 消费手动确认，可行 // TODO: 2024/8/2 并发接收消息参考MQConsumer
  */
-@Component
-public class ManualAckConsumerListener {
-    private static final Logger log = LoggerFactory.getLogger(ManualAckConsumerListener.class);
+//@Component
+public class ConsumerOrderlyListener {
+    private static final Logger log = LoggerFactory.getLogger(ConsumerOrderlyListener.class);
 
     @Value("${rocketmq.name-server}")
     private String rocketmqNameServer;
@@ -42,10 +42,10 @@ public class ManualAckConsumerListener {
 
 
     /**
-     * @EventListener注解：指定Springboot启动后要执行的方法，实现同样的功能可以实现CommandLineRunner或ApplicationRunner接口
      * @throws MQClientException
+     * @EventListener注解：指定Springboot启动后要执行的方法，实现同样的功能可以实现CommandLineRunner或ApplicationRunner接口
      */
-//    @EventListener(ApplicationReadyEvent.class)
+    @EventListener(ApplicationReadyEvent.class)  // 或者@PostConstruct //依赖注入完成后被自动调用，方法不能有参数，必须是非静态
     public void onApplicationReady() throws MQClientException {
         // SpringBoot启动完成后要执行的操作
         log.info("springboot启动完成，注册RocketMQ消费者");
@@ -59,8 +59,9 @@ public class ManualAckConsumerListener {
         // 订阅主题和标签
         consumer.subscribe(bankTransferTopic, "*");
 
-        // 注册消息监听器
+        // 注册消息监听器  并发接收消息使用 MessageListenerConcurrently
         consumer.registerMessageListener(new MessageListenerOrderly() {
+
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
 
@@ -97,7 +98,7 @@ public class ManualAckConsumerListener {
                         log.info("银行转账事务消息消费，本地账户更新结果：{}", isSuccess);
 
                         if (isSuccess) {
-                            successNum ++;
+                            successNum++;
                         }
 
                     } catch (Exception e) {
@@ -115,12 +116,13 @@ public class ManualAckConsumerListener {
                 }
 
                 // 将不断重复消费未确认的消息
-                 return null;
+                return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
+                //return null;
 
                 // 可选的返回值有：
                 // return ConsumeOrderlyStatus.SUCCESS; // 成功消费
                 // return ConsumeOrderlyStatus.FAILED; // 消费失败，将重新消费
-               // return ConsumeOrderlyStatus.COMMIT; // 提交消费位置，不重新消费
+                // return ConsumeOrderlyStatus.COMMIT; // 提交消费位置，不重新消费
                 //return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT; // 暂停当前队列的消费
             }
         });

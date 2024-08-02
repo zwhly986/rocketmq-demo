@@ -101,7 +101,7 @@ logging:
 rocketmq:
   name-server: 192.168.199.151:9876  #nameServer地址
   producer:
-    group: orderlyProducerGroup  #随便给一个默认的生产者组名，不填启动项目报错
+    group: transfer-producer-group  #生产组名称,随便给一个,不填启动项目报错
     send-message-timeout: 3000  #发送消息的超时时间
     compress-message-body-threshold: 1024  #压缩消息体的阈值
     retry-another-broker-when-send-failed: true  #发送失败时是否尝试连接另一个broker

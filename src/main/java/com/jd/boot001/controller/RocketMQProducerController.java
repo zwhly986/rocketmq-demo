@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * RocketMQ消息发送 (For RocketMQ5.2.0)
@@ -32,6 +33,8 @@ import java.util.UUID;
 @RequestMapping("/rocketMQProducer")
 public class RocketMQProducerController {
     private static final Logger log = LoggerFactory.getLogger(RocketMQProducerController.class);
+
+    private static final AtomicLong atomicLong = new AtomicLong(0);
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
@@ -66,6 +69,7 @@ public class RocketMQProducerController {
      * Tag过滤：主题相同的情况下，如果消费者订阅的Tag和发送者设置的消息Tag相互匹配，则消息被投递给消费端进行消费。
      * http://localhost:8080/boot001/rocketMQProducer/send/tag
      * 监听器：TagTopicMsgListener
+     *
      * @return
      */
     @GetMapping("/send/tag")
@@ -81,7 +85,7 @@ public class RocketMQProducerController {
          * 消息主题相同，且消费者订阅的Tag和发送者设置的消息Tag相互匹配，则消息被投递给消费端进行消费
          * topic如果想加标签，写法是topic:tag
          */
-        SendResult result = rocketMQTemplate.syncSend("tagTopic:java", "这是一个带有 java tag 的消息 " + DateUtils.date());
+        SendResult result = rocketMQTemplate.syncSend("tagTopic:java", "这是一个带有java tag的消息[" + DateUtils.date() + "]");
         return "带标签的消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId();
     }
 
@@ -89,8 +93,9 @@ public class RocketMQProducerController {
     /**
      * 发送同步消息
      * http://localhost:8080/boot001/rocketMQProducer/send/sync/同步消息001
-     *
+     * <p>
      * 监听器：SyncMsgListener
+     *
      * @param msg
      * @return
      */
@@ -105,6 +110,7 @@ public class RocketMQProducerController {
      * 发送异步消息
      * http://localhost:8080/boot001/rocketMQProducer/send/async/异步消息002
      * 监听器：AsyncMsgListener
+     *
      * @param msg
      * @return
      */
@@ -131,6 +137,7 @@ public class RocketMQProducerController {
      * 发送单向信息
      * http://localhost:8080/boot001/rocketMQProducer/send/oneWay/单向消息003
      * 监听器：OneWayMsgListener
+     *
      * @param msg
      * @return
      */
@@ -151,10 +158,38 @@ public class RocketMQProducerController {
      */
     @GetMapping("/send/delay/{msg}")
     public String sendDelayMessage(@PathVariable String msg) {
-        Message<String> message = MessageBuilder.withPayload(msg + "[发送时间：" + DateUtils.date() + "]").build();
+        long num = atomicLong.getAndIncrement();
+        String msgx = String.format("%s[%d][发送时间：%s]", msg, num, DateUtils.date());
+        Message<String> message = MessageBuilder.withPayload(msgx).build();
+
+        /*
+        参数四：延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
+        设置延迟消费时间，设置延迟时间级别0,18,0表示不延迟，18表示延迟2h，大于18的都是2h
+        */
+        // 1.同步发送
+        //SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 5);
+        //return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
+
+
+        // 2.异步发送
         // 延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
-        SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 5);
-        return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
+        rocketMQTemplate.asyncSend("delayTopic", message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("延迟消息异步发送成功");
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                log.error("延迟消息异步发送失败");
+            }
+        }, 2000, 3);
+
+        return "延迟消息异步发送完成：" + DateUtils.date();
+
+        // 3.单向发送
+
+
     }
 
 
@@ -166,6 +201,7 @@ public class RocketMQProducerController {
      * syncSendOrderly 发送同步顺序消息
      * asyncSendOrderly 发送异步同步消息
      * sendOneWayOrderly 发送单向顺序消息
+     *
      * @return
      */
     @GetMapping("/send/orderly")
