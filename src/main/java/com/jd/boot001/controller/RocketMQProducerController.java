@@ -66,6 +66,7 @@ public class RocketMQProducerController {
      * Tag过滤：主题相同的情况下，如果消费者订阅的Tag和发送者设置的消息Tag相互匹配，则消息被投递给消费端进行消费。
      * http://localhost:8080/boot001/rocketMQProducer/send/tag
      * 监听器：TagTopicMsgListener
+     *
      * @return
      */
     @GetMapping("/send/tag")
@@ -81,7 +82,7 @@ public class RocketMQProducerController {
          * 消息主题相同，且消费者订阅的Tag和发送者设置的消息Tag相互匹配，则消息被投递给消费端进行消费
          * topic如果想加标签，写法是topic:tag
          */
-        SendResult result = rocketMQTemplate.syncSend("tagTopic:java", "这是一个带有 java tag 的消息 " + DateUtils.date());
+        SendResult result = rocketMQTemplate.syncSend("tagTopic:java", "这是一个带有java tag的消息[" + DateUtils.date() + "]");
         return "带标签的消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId();
     }
 
@@ -89,8 +90,9 @@ public class RocketMQProducerController {
     /**
      * 发送同步消息
      * http://localhost:8080/boot001/rocketMQProducer/send/sync/同步消息001
-     *
+     * <p>
      * 监听器：SyncMsgListener
+     *
      * @param msg
      * @return
      */
@@ -105,6 +107,7 @@ public class RocketMQProducerController {
      * 发送异步消息
      * http://localhost:8080/boot001/rocketMQProducer/send/async/异步消息002
      * 监听器：AsyncMsgListener
+     *
      * @param msg
      * @return
      */
@@ -131,6 +134,7 @@ public class RocketMQProducerController {
      * 发送单向信息
      * http://localhost:8080/boot001/rocketMQProducer/send/oneWay/单向消息003
      * 监听器：OneWayMsgListener
+     *
      * @param msg
      * @return
      */
@@ -166,6 +170,7 @@ public class RocketMQProducerController {
      * syncSendOrderly 发送同步顺序消息
      * asyncSendOrderly 发送异步同步消息
      * sendOneWayOrderly 发送单向顺序消息
+     *
      * @return
      */
     @GetMapping("/send/orderly")

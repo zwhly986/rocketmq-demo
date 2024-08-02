@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * 发送批量消息--监听器
  */
 @Component
-@RocketMQMessageListener(topic = "batchOrderly", consumerGroup = "batch-orderly-consumer")
+//@RocketMQMessageListener(topic = "batchOrderly", consumerGroup = "batch-orderly-consumer")
 public class BatchMsgListener implements RocketMQListener<Order> {
     private static final Logger log = LoggerFactory.getLogger(BatchMsgListener.class);
 

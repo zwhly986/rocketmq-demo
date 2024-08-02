@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * // TODO: 2024/8/2 该文件不要用，不能手动提交 
  * 事务消息消费，消费者端
  * 银行转账
  */
