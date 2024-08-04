@@ -168,7 +168,7 @@ public class RocketMQProducerController {
         设置延迟消费时间，设置延迟时间级别0,18,0表示不延迟，18表示延迟2h，大于18的都是2h
         */
         // 1.同步发送
-        SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 18);
+        SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 12000, 3);
         return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
 
 
