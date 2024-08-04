@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 延迟消息--监听器
+ * // TODO: 2024/8/3 没有手动提交消费结果 
  */
 @Component
 //@RocketMQMessageListener(topic = "delayTopic", consumerGroup = "delay-topic-group-consumer")

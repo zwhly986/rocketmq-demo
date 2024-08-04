@@ -94,9 +94,9 @@ public class ConsumerConcurrentlyListener {
 //                    log.info("顺序消费数据：" + new String(msg.getBody()));
                     log.info("消息内容：{}：{}", new String(msg.getBody()), DateUtils.date());
                 }
-                // 消费成功
+                // 提交消费结果：消费成功
                 return ConsumeOrderlyStatus.SUCCESS;
-                // 消费失败
+                // 提交消费结果：消费失败
                 //return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
             }
         });

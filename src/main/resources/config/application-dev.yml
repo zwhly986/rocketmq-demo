@@ -99,7 +99,7 @@ logging:
 
 #RocketMQ配置
 rocketmq:
-  name-server: 192.168.199.151:9876  #nameServer地址
+  name-server: 192.168.199.151:9876  #nameServer地址，若多个以分号隔开
   producer:
     group: transfer-producer-group  #生产组名称,随便给一个,不填启动项目报错
     send-message-timeout: 3000  #发送消息的超时时间
