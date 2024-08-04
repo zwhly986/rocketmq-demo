@@ -1,9 +1,10 @@
 package com.jd.boot001.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.jd.boot001.common.R;
 import com.jd.boot001.entity.Order;
+import com.jd.boot001.service.SendMQService;
 import com.jd.boot001.utils.DateUtils;
-import com.jd.boot001.utils.SendOrderlyMessage;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -40,7 +41,7 @@ public class RocketMQProducerController {
     private RocketMQTemplate rocketMQTemplate;
 
     @Autowired
-    private SendOrderlyMessage sendOrderlyMessage;
+    private SendMQService sendMQService;
 
     /**
      * 同步发送消息
@@ -48,7 +49,7 @@ public class RocketMQProducerController {
      */
     @GetMapping("/sync")
     public R sync() {
-        sendOrderlyMessage.sync();
+        sendMQService.sync();
         return R.success();
     }
 
@@ -58,7 +59,7 @@ public class RocketMQProducerController {
      */
     @GetMapping("/async")
     public R async() {
-        sendOrderlyMessage.async();
+        sendMQService.async();
         return R.success();
     }
 
@@ -157,7 +158,7 @@ public class RocketMQProducerController {
      * @return
      */
     @GetMapping("/send/delay/{msg}")
-    public String sendDelayMessage(@PathVariable String msg) {
+    public String sendDelayMessage(@PathVariable String msg) throws Exception {
         long num = atomicLong.getAndIncrement();
         String msgx = String.format("%s[%d][发送时间：%s]", msg, num, DateUtils.date());
         Message<String> message = MessageBuilder.withPayload(msgx).build();
@@ -167,10 +168,11 @@ public class RocketMQProducerController {
         设置延迟消费时间，设置延迟时间级别0,18,0表示不延迟，18表示延迟2h，大于18的都是2h
         */
         // 1.同步发送
-        //SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 2000, 5);
-        //return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
+        SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 12000, 3);
+        return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
 
 
+        /*
         // 2.异步发送
         // 延迟级别 "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h"
         rocketMQTemplate.asyncSend("delayTopic", message, new SendCallback() {
@@ -186,9 +188,11 @@ public class RocketMQProducerController {
         }, 2000, 3);
 
         return "延迟消息异步发送完成：" + DateUtils.date();
+        */
 
-        // 3.单向发送
-
+        /*// 3.延迟时间任意（定时） // TODO: 2024/8/2
+        R result = sendMQService.sendDelayMsg(msg);
+        return JSON.toJSONString(result);*/
 
     }
 

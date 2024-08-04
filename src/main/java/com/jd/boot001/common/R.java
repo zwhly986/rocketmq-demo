@@ -22,6 +22,20 @@ public class R extends HashMap<String, Object> implements Serializable {
      */
     private Object data;
 
+    public static R ok() {
+        R map = new R();
+        map.put(Const.CODE, "0");
+        map.put(Const.MSG, "操作成功");
+        return map;
+    }
+
+    public static R ok(String msg) {
+        R map = new R();
+        map.put(Const.CODE, "0");
+        map.put(Const.MSG, msg);
+        return map;
+    }
+
     public static R success() {
         R map = new R();
         map.put(Const.CODE, "0");
@@ -50,6 +64,8 @@ public class R extends HashMap<String, Object> implements Serializable {
         map.put(Const.MSG, "操作失败，" + msg);
         return map;
     }
+
+
 
     public R code(String code) {
         this.put(Const.CODE, code);
