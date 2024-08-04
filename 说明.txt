@@ -33,6 +33,23 @@ sudo systemctl daemon-reload
 sudo systemctl enable rocketmq-dashboard.service
 sudo systemctl start rocketmq-dashboard.service
 
+【RocketMQ相关问题】
+一、RocketMQ启动失败解决
+  RocketMQ 默认的虚拟机内存较大，启动 Broker 或者 NameServer 可能会因为内存不足而导致失败，所以需要编辑如下两个配置文件，
+  修改 JVM 内存大小。
+  编辑 runbroker.sh 和 runserver.sh 修改默认 JVM 大小
+  $ vi bin/runbroker.sh
+  # 参考设置
+  JAVA_OPT=“${JAVA_OPT} -server -Xms256m -Xmx256m -Xmn128m”
+  $ vi bin/runserver.sh
+  # 参考设置
+  JAVA_OPT=“${JAVA_OPT} -server -Xms256m -Xmx256m -Xmn128m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m”
+
+二、向RocketMQ发送消息失败解决
+  开发端口9876、10911
+  sudo iptables -I INPUT -p tcp --dport 9876 -j ACCEPT
+  sudo iptables -I INPUT -p tcp --dport 10911 -j ACCEPT
+
 
 
 
