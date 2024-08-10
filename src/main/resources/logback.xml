@@ -8,9 +8,9 @@ configuration作为logback的根节点有以下属性
 -->
 <configuration debug="false">
 
-    <!--定义日志文件的存储地址，勿在 LogBack 的配置中使用相对路径，根据实际需要修改-->
-    <!--<property name="LOG_HOME" value="D://logs"/>-->
-    <property name="LOG_HOME" value="/logs/boot001"/> <!--自定义属性，后面用-->
+    <!-- 日志文件目录，勿在 LogBack 的配置中使用相对路径，根据实际需要修改 -->
+    <!-- <property name="log.path" value="D://logs"/> -->
+    <property name="log.path" value="/opt/logs/boot001"/> <!--自定义属性，后面用-->
     <property name="APP_NAME" value="boot001"/> <!--自定义属性，后面用-->
 
     <!--
@@ -32,11 +32,12 @@ configuration作为logback的根节点有以下属性
 
     -->
 
-    <!--控制台 -->
+    <!-- 控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{56}.%method: %L - %msg%n</pattern>
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %X{ThreadID} %-5level %logger{56}.%method: %L - %msg%n</pattern>-->
+            <pattern>%date [%thread|%X{invokeNo}] %-5level %logger{40}.%method %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -47,14 +48,13 @@ configuration作为logback的根节点有以下属性
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <fileNamePattern>${LOG_HOME}/${APP_NAME}_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log.path}/${APP_NAME}_%d{yyyy-MM-dd-HH}.log</fileNamePattern>
             <!--日志文件保留天数-->
             <maxHistory>5</maxHistory>
         </rollingPolicy>
 
         <encoder charset="UTF-8">
-            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread] %file:%line - %msg%n</pattern>-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{56}.%method: %L - %msg%n</pattern>
+            <pattern>%date|%thread|%X{invokeNo}|%-5level|%logger{80}.%method:%L|%msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
 
@@ -78,7 +78,7 @@ configuration作为logback的根节点有以下属性
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             &lt;!&ndash;日志文件输出的文件名&ndash;&gt;
-            <fileNamePattern>${LOG_HOME}/${APP_NAME}.%d{yyyy-MM-dd}-info.log</fileNamePattern>
+            <fileNamePattern>${log.path}/${APP_NAME}.%d{yyyy-MM-dd}-info.log</fileNamePattern>
             &lt;!&ndash;日志文件保留天数&ndash;&gt;
             <maxHistory>5</maxHistory>
         </rollingPolicy>
@@ -108,7 +108,7 @@ configuration作为logback的根节点有以下属性
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             &lt;!&ndash;日志文件输出的文件名&ndash;&gt;
-            <fileNamePattern>${LOG_HOME}/${APP_NAME}.%d{yyyy-MM-dd}-warn.log</fileNamePattern>
+            <fileNamePattern>${log.path}/${APP_NAME}.%d{yyyy-MM-dd}-warn.log</fileNamePattern>
             &lt;!&ndash;日志文件保留天数&ndash;&gt;
             <maxHistory>30</maxHistory>
         </rollingPolicy>
@@ -138,7 +138,7 @@ configuration作为logback的根节点有以下属性
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             &lt;!&ndash;日志文件输出的文件名&ndash;&gt;
-            <fileNamePattern>${LOG_HOME}/${APP_NAME}.%d{yyyy-MM-dd}-error.log</fileNamePattern>
+            <fileNamePattern>${log.path}/${APP_NAME}.%d{yyyy-MM-dd}-error.log</fileNamePattern>
             &lt;!&ndash;日志文件保留天数&ndash;&gt;
             <maxHistory>30</maxHistory>
         </rollingPolicy>

@@ -170,6 +170,8 @@ public class RocketMQProducerController {
      */
     @GetMapping("/send/delay/{msg}")
     public String sendDelayMessage(@PathVariable String msg) throws Exception {
+        log.info("发送延迟消息：{}", msg);
+
         long num = atomicLong.getAndIncrement();
         String msgx = String.format("%s[%d][发送时间：%s]", msg, num, DateUtils.date());
         Message<String> message = MessageBuilder.withPayload(msgx).build();

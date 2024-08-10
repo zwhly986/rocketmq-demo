@@ -2,6 +2,7 @@ package com.jd.boot001.listener;
 
 
 import com.jd.boot001.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -11,6 +12,7 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -99,6 +101,12 @@ public class ConsumerConcurrentlyListener {
         consumer.registerMessageListener(new MessageListenerOrderly() {
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgList, ConsumeOrderlyContext context) {
+                // invokeNo：记录日志用
+                String invokeNo = MDC.get("invokeNo");
+                if(StringUtils.isNotBlank(invokeNo)){
+                    MDC.put("invokeNo", invokeNo);
+                }
+
                 MessageQueue messageQueue = context.getMessageQueue();
 
                 // 读到的数据是乱序的
