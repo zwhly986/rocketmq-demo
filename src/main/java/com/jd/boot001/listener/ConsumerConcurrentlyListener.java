@@ -1,8 +1,11 @@
 package com.jd.boot001.listener;
 
+
 import com.jd.boot001.utils.DateUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.*;
+import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.message.MessageQueue;
@@ -15,8 +18,16 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
+ * 在消费者初始化时注册一个消费监听器，在消费监听器内部实现消息处理逻辑
  * 并发接收消息，手动确认
  * 顺序接收消息参考ConsumerOrderlyListener
+ *
+ * broker:中介性代理，是一种消息中间件软件,它负责接收、处理、分发应用程序之间的消息
+ * 消费者类型：
+ * PullConsumer：在流处理框架中集成使用
+ * PushConsumer
+ * SimpleConsumer
+ * 生产环境中相同的 ConsumerGroup 下严禁混用 PullConsumer 和其他两种消费者，否则会导致消息消费异常
  */
 @Component
 public class ConsumerConcurrentlyListener {
@@ -55,6 +66,7 @@ public class ConsumerConcurrentlyListener {
         // 设置重试次数 默认16次
         consumer.setMaxReconsumeTimes(1);
 
+        // 并发消费
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
@@ -66,9 +78,9 @@ public class ConsumerConcurrentlyListener {
                         log.error("业务处理异常", e);
 					}
                 }
-                // 消费成功
+                // 消费状态提交：消费成功
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-                // 消费失败
+                // 消费状态提交：消费失败
                 //return ConsumeConcurrentlyStatus.RECONSUME_LATER;
                 //return null; // 不断重复消费，不要用
             }
@@ -92,7 +104,9 @@ public class ConsumerConcurrentlyListener {
                 // 读到的数据是乱序的
                 for (MessageExt msg : msgList) {
 //                    log.info("顺序消费数据：" + new String(msg.getBody()));
-                    log.info("消息内容：{}：{}", new String(msg.getBody()), DateUtils.date());
+                    log.info("消费delayTopic消息：{}---[消费时间：{}]", new String(msg.getBody()), DateUtils.date());
+                    // TODO: 2024/8/4 在消费监听器内部实现消息处理逻辑
+                    
                 }
                 // 提交消费结果：消费成功
                 return ConsumeOrderlyStatus.SUCCESS;
@@ -103,6 +117,10 @@ public class ConsumerConcurrentlyListener {
 
         consumer.start();
         log.info("RocketMQ消费者启动成功");
-    }
+    }  // 方法end
+
+
 
 }
+
+

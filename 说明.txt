@@ -21,8 +21,8 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/java/jdk1.8.0_261/bin/java -jar /home/hua/rocketmq/rocketmq-dashboard-1.0.1-SNAPSHOT.jar
-Restart=on-failure
+ExecStart=/java/jdk1.8.0_261/bin/java -jar /home/hua/rocketmq/rocketmq-dashboard-1.0.1-SNAPSHOT.jar  --rocketmq.config.namesrvAddrs=127.0.0.1:9876
+#Restart=on-failure
 User=root
 
 [Install]
