@@ -8,7 +8,7 @@ import java.util.HashMap;
 @Data
 public class R extends HashMap<String, Object> implements Serializable {
     /**
-     * 响应码
+     * 响应码，200：成功，其它：失败
      */
     private String code;
 
@@ -24,28 +24,28 @@ public class R extends HashMap<String, Object> implements Serializable {
 
     public static R ok() {
         R map = new R();
-        map.put(Const.CODE, "0");
+        map.put(Const.CODE, 200);
         map.put(Const.MSG, "操作成功");
         return map;
     }
 
     public static R ok(String msg) {
         R map = new R();
-        map.put(Const.CODE, "0");
+        map.put(Const.CODE, 200);
         map.put(Const.MSG, msg);
         return map;
     }
 
     public static R success() {
         R map = new R();
-        map.put(Const.CODE, "0");
+        map.put(Const.CODE, 200);
         map.put(Const.MSG, "操作成功");
         return map;
     }
 
     public static R success(Object data) {
         R map = new R();
-        map.put(Const.CODE, "0");
+        map.put(Const.CODE, 200);
         map.put(Const.MSG, "操作成功");
         map.put(Const.DATA, data);
         return map;
@@ -105,4 +105,13 @@ public class R extends HashMap<String, Object> implements Serializable {
     public void setData(Object data) {
         this.data = data;
     }
+
+
+    @Override
+    public R put(String key, Object value) {
+        super.put(key, value);
+        return this;
+    }
+
+
 }

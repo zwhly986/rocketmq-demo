@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,16 @@ public class RocketMQProducerController {
 
     @Autowired
     private SendMQService sendMQService;
+
+    /**
+     * 定时任务：每隔5秒执行一次
+     */
+//    @Scheduled(fixedRate = 5000)
+    public void performTask() {
+        // 执行定时任务的逻辑
+        log.info("定时任务执行中..." + DateUtils.date());
+    }
+
 
     /**
      * 同步发送消息
@@ -169,7 +180,7 @@ public class RocketMQProducerController {
         */
         // 1.同步发送
         SendResult result = rocketMQTemplate.syncSend("delayTopic", message, 12000, 3);
-        return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>消息发送时间：" + DateUtils.date();
+        return "延迟消息发送状态：" + result.getSendStatus() + "<br>消息id：" + result.getMsgId() + "<br>发送时间：" + DateUtils.date();
 
 
         /*

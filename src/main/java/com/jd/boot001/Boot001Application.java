@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = "com.jd.boot001.*")
 //@MapperScan(value = {"com.jd.boot001.**.mapper"})
 @MapperScan(value = {"com.jd.boot001.mapper"}) // 有此注解，则不需要在保包中mapper接口上添加@Mapper或@Repository
+@EnableScheduling
 public class Boot001Application implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(Boot001Application.class);
 

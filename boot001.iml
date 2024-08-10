@@ -95,6 +95,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:2.7.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.7.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.7.6" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2:2.0.52" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:druid-spring-boot-starter:1.1.22" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:druid:1.1.22" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
@@ -206,6 +207,5 @@
     <orderEntry type="library" name="Maven: io.github.aliyunmq:rocketmq-slf4j-api:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: io.github.aliyunmq:rocketmq-logback-classic:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.awaitility:awaitility:4.2.0" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2:2.0.52" level="project" />
   </component>
 </module>
