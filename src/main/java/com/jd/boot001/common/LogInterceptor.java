@@ -22,7 +22,7 @@ public class LogInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 放SessionId
-        String token = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
+        String token = UUID.randomUUID().toString().replaceAll("-", "");//.toUpperCase();
         MDC.put(INVOKE_NO, token);
         return true;
     }

@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.apache.rocketmq.common.message.Message;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 
@@ -116,8 +118,13 @@ public class SendMQServiceImpl implements SendMQService {
             );
 
             // 设置延迟时间，单位秒
-            msg.setDelayTimeSec(dalayTime); // 单位：秒
-            // msg.setDelayTimeMs(90); // 单位：毫秒
+            msg.setDelayTimeSec(dalayTime); // 单位：秒  // TODO: 2024/8/14
+            // msg.setDelayTimeMs(90); // 单位：毫秒 // TODO: 2024/8/14  
+
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-08-14 20:15:00");
+            long deliverTime = date.getTime();
+            msg.setDeliverTimeMs(deliverTime);
+            
 
             // Call send message to deliver message to one of brokers.
             SendResult sendResult = producer.send(msg);

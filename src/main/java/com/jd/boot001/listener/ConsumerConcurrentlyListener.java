@@ -2,7 +2,7 @@ package com.jd.boot001.listener;
 
 
 import com.jd.boot001.utils.DateUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.jd.boot001.utils.MdcUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -12,7 +12,6 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -98,15 +97,10 @@ public class ConsumerConcurrentlyListener {
         // 设置重试次数 默认16次
         consumer.setMaxReconsumeTimes(1);
 
+        // 顺序消费
         consumer.registerMessageListener(new MessageListenerOrderly() {
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgList, ConsumeOrderlyContext context) {
-                // invokeNo：记录日志用
-                String invokeNo = MDC.get("invokeNo");
-                if(StringUtils.isNotBlank(invokeNo)){
-                    MDC.put("invokeNo", invokeNo);
-                }
-
                 MessageQueue messageQueue = context.getMessageQueue();
 
                 // 读到的数据是乱序的
@@ -114,7 +108,7 @@ public class ConsumerConcurrentlyListener {
 //                    log.info("顺序消费数据：" + new String(msg.getBody()));
                     log.info("消费delayTopic消息：{}---[消费时间：{}]", new String(msg.getBody()), DateUtils.date());
                     // TODO: 2024/8/4 在消费监听器内部实现消息处理逻辑
-                    
+
                 }
                 // 提交消费结果：消费成功
                 return ConsumeOrderlyStatus.SUCCESS;
